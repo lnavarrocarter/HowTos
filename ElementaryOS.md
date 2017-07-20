@@ -3,7 +3,7 @@ Elementary OS
 
 Mis notas y tutoriales para Elementary OS.
 
-[TOC]
+[[TOC]]
 
 ## Crear una Entrada de Menú Contextual para Ejecutar Archivos *.desktop
 
