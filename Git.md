@@ -7,13 +7,13 @@ Ténicas Git para los machos alfa.
 
 ## Desplegar (deploy) en VPS
 
-#### Requerimientos:
+##### Requerimientos
 
 1. VPS con Ubuntu/Debian, configurada adecuadamente con Apache, MySQL, PHP, Composer, Node y otros
 2. Git en máquina de desarrollo y VPS
 3. Un VirtualHost de Apache ya configurado. Para esto, Webmin y Virtualmin son muy buenas opciones.
 
-##### Configurando la VPS:
+##### Configurando la VPS
 
 En la VPS, creamos una carpeta para guardar nuestras repos con `mkdir /var/repos && cd /var/repos`.
 
@@ -32,7 +32,7 @@ git --work-tree=[ubicacion/de/tus/archivos/html/para/servir] --git-dir=/var/repo
 
 Luego de esto, debemos hacer el post-recieve ejecutable con `sudo chmod +x post-receive`
 
-#### Configurando el entorno local para hacer push a la VPS
+##### Configurando el entorno local para hacer push a la VPS
 
 Luego de que ya hemos realizado todo lo anterior, ahora debemos aregar un `remote` a nuestro repositorio local. Tal como existe un `remote origin` que es el lugar donde recibimos los push de nuestro source code, podemos agregar un nuevo remote para decirle a git que pusheé cambios a otro repositorio. Esto se hace simplemente utilizando `git remote add production ssh://[usuario-vps]@[fqdn-vps]/var/repos/[tu-repo].git`. Para que esto funcione bien, debes tener configurado el acceso a tu VPS de ese usuario por medio de SSH Keys. Hay muchos tutoriales que enseñan cómo hacer eso en internet.
 
