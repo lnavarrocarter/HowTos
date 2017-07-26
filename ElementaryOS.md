@@ -30,3 +30,11 @@ Exec=pcmanfm %f
 
 Luego, si hacemos click derecho en cualquier archivo *.desktop, debería
 aparecer la entrada para ejecutarlo.
+
+### Editando Contractors Existentes en Elementary
+
+Cambiar el videobin contract por uno de [YouTube uploader](https://github.com/tokland/youtube-upload).
+
+Además, se pueden crear entradas de "Ejecutar" y "Hacer ejecutable" [aquí](https://unix.stackexchange.com/questions/192158/how-to-add-make-executable-and-run-entries-to-elementary-os-file-manager-con).
+
+Una cosa extra para hacer es añadir Mount ISO, como dice [aquí](https://elementaryos.stackexchange.com/questions/264/contract-file-to-mount-iso).
