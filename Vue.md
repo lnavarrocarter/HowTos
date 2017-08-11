@@ -9,6 +9,9 @@ Mis notas sobre Vue.js 2.0
 
 Así se inicia Vue:
 
+    <!-- No te olvides de colocar el CDN de Vue! -->
+    <script src="https://unpkg.com/vue"></script>
+
     <script>
     var app = new Vue({
 
