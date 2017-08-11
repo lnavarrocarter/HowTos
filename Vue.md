@@ -8,6 +8,7 @@ Mis notas sobre Vue.js 2.0
 ## La Estructura y Sintaxis de Vue
 
 Así se inicia Vue:
+
     <script>
     var app = new Vue({
 
@@ -47,6 +48,7 @@ usados de esa forma.
 Supongamos que queremos "amarrar" (bind) un valor del DOM a una propiedad
 de nuestra instancia de Vue (los valores contenidos en el objeto data).
 Eso se puede hacer de la siguiente manera, tomando el ejemplo anterior:
+
     <div id="app">
         <ul>
             <li v-for="name in names" v-text="name"></li>
