@@ -107,6 +107,89 @@ Luego, supongamos que en nuestro DOM tenemos un botón al cual queremos aplicar
 una clase luego de que ha sido clickeado.
 
     <div id="app">
-        <input type="text" v-bind:placeholder="placeText">
+        <button :class="{ 'is-red': isRed }" @click="toggleClass"></button>
     </div>
 
+El texto entre corchetes es un condicional Vue. Básicamente dice que
+aplicaremos la clase `is-red` dependiento del valor de la propiedad Vue
+**isRed**. Si la propiedad es falsa, entonces la clase no se aplica, pero 
+si la propiedad es verdadera, entonces se aplica la clase.
+
+También hay una directiva para un evento click que va a ejecutar la función
+toggleClass. Veamos como se ve todo esto en Vue.
+
+    <script>
+    var app = new Vue({
+
+        // El elemento del DOM sobre el cual Vue tiene control
+        el: '#app',
+
+        // Los datos que usa la instancia de Vue
+        data: { 
+            isRed: false 
+        },
+        
+        // Métodos que se usan en esta instancia de Vue
+        methods: {
+            toggleClass() {
+                // Recuerda incluir this para referirte a tus propiedades
+                this.isRed = true;
+            }
+        }
+
+    });
+    </script>
+
+Eso debería funcionar.
+
+## Propiedades Calculadas
+
+Hay veces en que no queremos utilizar nuestras propiedades de Vue así como
+vienen de nuestra llamada Ajax o nuestro DOM, sino que queremos hacer algunas
+modificaciones primero. Para eso existen las propiedades calculadas.
+
+Se agregan en el objeto `computed` de tu instancia de Vue.
+
+    <script>
+        var app = new Vue({
+
+            // El elemento del DOM sobre el cual Vue tiene control
+            el: '#app',
+
+            // Los datos que usa la instancia de Vue
+            data: { 
+                text: 'Hello world' 
+            },
+
+            // Aquí están las propiedades calculadad
+            computed: {
+                backwardsText() {
+                    this.text.split('').reverse().join('');
+                }
+            }
+
+        });
+        </script>
+
+Entonces, la propiedad de Vue **backwardsText** será el string **text** al
+revés, cuando se llame del dom.
+
+La ventaja de esto es que es reactivo. Si text cambia, la propiedad calculada
+también lo hará. ¡Este es el poder de Vue!
+
+## Componentes en Vue
+
+Un componente es, en pocas palabras, un bloque HTML personalizado hecho 
+en Vue. Por ejemplo, si queremos crear un componente que obtenga mis
+repositorios de GitHub, y los muestre todos en el DOM de mi sitio, debemos
+hacer lo siguiente:
+
+Lo primero que debemos entender, es que para nuestras propiedades en el objeto
+`data` debemos devolver un valor utilizando return(). Esto es diferente en la
+instancia principal de Vue, donde data no es una función sino un objeto.
+
+Aquí hay un [fiddle](https://jsfiddle.net/mnavarrocarter/qjcLu3y4/2/) con el experimento.
+
+<script async src="//jsfiddle.net/mnavarrocarter/qjcLu3y4/embed/js,html,css,result/dark/"></script>
+
+## 

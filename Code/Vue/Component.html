@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue Component Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="app" class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <h1 class="title">Componente Vue + Ajax</h1>
+                <p class="subtitle">Escribe el nombre de un usuario de GitHub para obtener sus repos.</p>
+                <div class="field">
+                    <div class="control has-icons-left">
+                        <input class="input" :class="{'is-danger' : hasError}" v-on:keyup.enter="fetchRepos" v-on:keyup="clearError" type="text" placeholder="Nombre de usuario" v-model="user">
+                        <span class="icon is-small is-left">
+                            <i class="fa fa-user"></i>
+                        </span>
+                    </div>
+                    <p class="help is-danger">
+                        {{msg}}
+                    </p>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-primary" :class="{'is-loading' : isLoading}" v-on:click="fetchRepos">Obtener Repos</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-light" :disabled="isDisabled" v-on:click="clearRepos">Limpiar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="columns" v-for="repo in repos">
+            <div class="column is-half is-offset-one-quarter">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {{repo.name}} ({{repo.language}})
+                        </p>
+                        <a class="card-header-icon">
+                      <span class="icon">
+                        <i class="fa fa-angle-down"></i>
+                      </span>
+                    </a>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            {{repo.description}}
+                            <br>
+                            <small>Creada: {{repo.created_at}}</small>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a class="card-footer-item" :href="repo.forks_url">Fork</a>
+                        <a class="card-footer-item" :href="repo.html_url + '/issues'">Issues</a>
+                        <a class="card-footer-item" :href="repo.html_url">Code</a>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            repos: [],
+            isDisabled: true,
+            user: '',
+            isLoading: false,
+            hasError: false,
+            msg: '',
+        },
+        methods: {
+            fetchRepos() {
+                this.isLoading = true;
+                if (!this.user) {
+                    this.setError('Debes escribir un nombre de usuario.');
+                    this.isLoading = false;
+                } else {
+                    fetch('https://api.github.com/users/' + this.user + '/repos')
+                        .then(resp => this.handleErrors(resp))
+                        .then(data => {
+                            this.repos = data.filter(repo => (repo.fork == false));
+                            this.isLoading = false;
+                            if (data.length == 0) {
+                                this.setError('Este usuario no tiene repositorios.');
+                            } else {
+                                this.isDisabled = false;
+                            }
+                        
+                        })
+                        .catch(error => {
+                            this.setError('Nombre de usuario no existente.');
+                            this.isLoading = false;
+                        });
+                }
+            },
+            clearRepos() {
+                this.isDisabled = true;
+                this.repos = [];
+                this.user = '';
+            },
+            setError(msg) {
+                this.msg = msg;
+                this.hasError = true;
+            },
+            clearError() {
+                this.hasError = false;
+                this.msg = ''
+            },
+            handleErrors(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Github username not found');
+                }
+            }
+        }
+    });
+    </script>
+</body>
+
+</html>
