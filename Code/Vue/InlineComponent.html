@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue Component Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+      <progress-view inline-template>
+        <div>
+          <h1>Tu progreso en el curso es de {{completionRate}}%</h1>
+          <p><button v-on:click="completionRate += 10">Update Completion Rate</button></p>
+        </div>
+      </progress-view>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+
+    Vue.component('progress-view', {
+        data() {
+          return {
+            completionRate: 0
+          }
+        }
+    });
+
+    const app = new Vue({
+        el: '#app'
+    });
+    
+    </script>
+</body>
+
+</html>

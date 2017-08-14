@@ -272,7 +272,7 @@ acción al momento de cerrar el modal. Lo que hacemos es que cuando el evento
 lo que va a esconder el modal. Esta es la forma de comunicar dos instancias
 de Vue.
 
-## Comunicación entre componentes Hermanos
+## Comunicación entre componentes hermanos
 
 Hay una técnica en Vue para crear una especie de instancia de Vue, como un
 canal de eventos donde podemos escuchar por y emitir diferentes eventos en
@@ -331,3 +331,72 @@ ser compilado con Webpack:
     } 
 
 Luego, podemos usar `Event.fire('un-evento', datos)` y `Event.listen('un-evento', callback)`.
+
+## Slots con nombre
+
+En Vue, podemos dar nombres a slots para luego asignarlos a nuestras plantillas,
+como una mejor forma de construir componentes y organizar nuestro contenido.
+
+Es tan simple como hacer lo siguiente en nuestro markup:
+
+    <div id="app" class="container">
+       <modal v-show="showModal" v-on:close="showModal = false">
+          
+          <template slot="header">Título de mi modal</template>
+
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio ex sed nemo, impedit accusamus, cum et. Voluptatem reiciendis in, optio officia nobis inventore esse dolorum explicabo quae quam cumque excepturi.
+          
+          <template slot="footer">
+            <button class="button is-success">Save changes</button>
+            <button class="button" v-on:click="$emit('close')">Cancel</button>
+          </template>
+       
+       </modal>
+       <button class="button is-primary is-large" v-on:click="showModal = true">Show Modal</button>
+    </div>
+
+Algo que notar aquí son las etiquetas `<template>` y los atributos `slot`.
+Esto nos dará el html dentro de los template y lo asignará al slot correspondiente:
+
+    Vue.component('modal', {
+        // Y luego la plantilla
+        template: `
+            <div class="modal is-active">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">
+                    <slot name="header"></slot>
+                  </p>
+                  <button class="delete" v-on:click="$emit('close')" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                  <slot></slot>
+                </section>
+                <footer class="modal-card-foot">
+                  <slot name="footer"></slot>
+                </footer>
+              </div>
+            </div>
+        `
+    });
+
+    const app = new Vue({
+        el: '#app',
+
+        data: {
+            showModal: false
+        }
+    });
+
+¡Es así de simple!
+
+## Plantillas en línea
+
+Puedes definir plantillas para tus componentes en línea añadiendo el 
+atributo de inline-template a la declaración de tu componente en markup.
+Esto hace que Vue no necesite una plantilla especificada en tu código Javascript 
+y es muy últil a la hora de desarrollar aplicaciones con backend.
+
+## Estados compartidos
+

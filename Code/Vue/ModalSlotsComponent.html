@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue Component Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="container">
+       <modal v-show="showModal" v-on:close="showModal = false">
+          
+          <template slot="header">Título de mi modal</template>
+
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odio ex sed nemo, impedit accusamus, cum et. Voluptatem reiciendis in, optio officia nobis inventore esse dolorum explicabo quae quam cumque excepturi.
+          
+          <template slot="footer">
+            <button class="button is-success">Save changes</button>
+            <button class="button" v-on:click="$emit('close')">Cancel</button>
+          </template>
+       
+       </modal>
+       <button class="button is-primary is-large" v-on:click="showModal = true">Show Modal</button>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+
+    Vue.component('modal', {
+        // Y luego la plantilla
+        template: `
+            <div class="modal is-active">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">
+                    <slot name="header"></slot>
+                  </p>
+                  <button class="delete" v-on:click="$emit('close')" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                  <slot></slot>
+                </section>
+                <footer class="modal-card-foot">
+                  <slot name="footer"></slot>
+                </footer>
+              </div>
+            </div>
+        `
+    });
+
+    const app = new Vue({
+        el: '#app',
+
+        data: {
+            showModal: false
+        }
+    });
+    
+    </script>
+</body>
+
+</html>
