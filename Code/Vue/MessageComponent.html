@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue Message Component Exercise</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="app" class="container">
+        <message title="Bienvenido" body="Esto es un componente de mensaje hecho con Vue.js!"></message>
+        <message title="Otro Mensaje!" body="Esto es otro mensaje creado con Vue.js basado en el mismo componente. Son independientes los unos de los otros. Si no me crees, cierra el mensaje!"></message>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+    Vue.component('message', {
+    // Estas son las propiedades que nuestro componente aceptará
+    props: ['title', 'body'],
+    data() {
+        return {
+            isVisible: true,
+        }
+    },
+    // Y luego la plantilla
+    template: `
+        <article class="message" v-show="isVisible">
+          <div class="message-header">
+            {{title}}
+            <button class="delete" v-on:click="hideMessage" aria-label="delete"></button>
+          </div>
+          <div class="message-body">
+            {{body}}
+          </div>
+        </article>
+    `,
+    methods: {
+        hideModal() {
+            this.isVisible = false;
+        }
+    }
+});
+
+const app = new Vue({
+    el: '#app'
+});
+    </script>
+</body>
+
+</html>

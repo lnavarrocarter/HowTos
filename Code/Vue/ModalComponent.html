@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vue Component Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="app" class="container">
+       <modal v-show="showModal" v-on:close="showModal = false">
+           Hola soy un mensaje muy cool.
+       </modal>
+       <button class="button is-primary is-large" v-on:click="showModal = true">Show Modal</button>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+
+    Vue.component('modal', {
+        // Y luego la plantilla
+        template: `
+            <div class="modal is-active">
+              <div class="modal-background"></div>
+              <div class="modal-content">
+                <div class="box">
+                    <slot></slot>
+                </div>
+              </div>
+              <button class="modal-close is-large" v-on:click="$emit('close')" aria-label="close"></button>
+            </div>
+        `
+    });
+
+    const app = new Vue({
+        el: '#app',
+
+        data: {
+            showModal: false
+        }
+    });
+    
+    </script>
+</body>
+
+</html>

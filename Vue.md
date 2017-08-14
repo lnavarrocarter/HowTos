@@ -185,11 +185,89 @@ repositorios de GitHub, y los muestre todos en el DOM de mi sitio, debemos
 hacer lo siguiente:
 
 Lo primero que debemos entender, es que para nuestras propiedades en el objeto
-`data` debemos devolver un valor utilizando return(). Esto es diferente en la
+`data` debemos devolver un valor utilizando `return()`. Esto es diferente en la
 instancia principal de Vue, donde data no es una función sino un objeto.
 
-Aquí hay un [fiddle](https://jsfiddle.net/mnavarrocarter/qjcLu3y4/2/) con el experimento.
+Aquí hay un [fiddle](https://jsfiddle.net/mnavarrocarter/qjcLu3y4/2/) con
+el experimento. Un par de propiedades, estilos con Bulma y un poco de validación
+de respuesta con `fetch()`, y listo!
 
-<script async src="//jsfiddle.net/mnavarrocarter/qjcLu3y4/embed/js,html,css,result/dark/"></script>
+## Propiedades de Componentes
 
-## 
+Algo que no he mencionado son las propiedades de los componentes. Supongamos
+que tenemos un componente de mensaje con un título y un mensaje. Usando Bulma,
+nuestra plantilla sería así:
+
+    Vue.component('message', {
+        // Estas son las propiedades que nuestro componente aceptará
+        props: ['title', 'body'],
+
+        // Y luego la plantilla
+        template: `
+            <article class="message">
+              <div class="message-header">
+                <p>{{title}}</p>
+                <button class="delete" aria-label="delete"></button>
+              </div>
+              <div class="message-body">
+                {{body}}
+              </div>
+            </article>
+        `
+    });
+
+    const app = new Vue({
+        el: '#app'
+    });
+
+Luego, nuestro markup sólo tiene que hacer lo siguiente:
+
+    <div id="app">
+        <div class="container">
+            <message title="Bienvenido" body="Esto es un componente de mensaje hecho con Vue.js!"></message>
+        </div>
+    </div>
+
+La ventaja de esto es que si cambio el Markup, el contenido del componente cambia.
+
+## Eventos Personalizados
+
+Cuando desarrollamos en Vue, debemos entender que componentes son instancias
+separadas de la instancia principal de Vue. Esto significa que sus propiedades,
+métodos y referencias son diferentes. Pero ¿cómo lo hacemos para que ambas
+interactúen entonces? Es ahí donde entran los eventos personalizados.
+
+Supongamos que tenemos un componente llamado modal:
+
+    Vue.component('modal', {
+        template: `
+            <div class="modal is-active">
+              <div class="modal-background"></div>
+              <div class="modal-content">
+                <div class="box">
+                    <slot></slot>
+                </div>
+              </div>
+              <button class="modal-close is-large" v-on:click="$emit('close')" aria-label="close"></button>
+            </div>
+        `
+    });
+
+Este componente es un componente de Bulma, is está listo para usar. Lo que
+tenemos que fijarnos es que al final, en el botón de cierre hay un `v-on:click="$emit('close')"`.
+Lo que hace esta función es emitir un evento personalizado, que luego puede
+ser escuchado por nuestra instancia `root` de Vue de la siguiente forma en
+nuestro markup:
+
+    <div id="app" class="container">
+       <modal v-show="showModal" v-on:close="showModal = false">
+            Hola soy un mensaje muy bonito.
+       </modal>
+       <button class="button is-primary is-large" v-on:click="showModal = true">Show Modal</button>
+    </div>
+
+En nuestro elemento modal, definido en nuestro root, estamos realizando una
+acción al momento de cerrar el modal. Lo que hacemos es que cuando el evento
+`close` es emitido, entonces actualizamos la propiedad **showModal** en `root`,
+lo que va a esconder el modal. Esta es la forma de comunicar dos instancias
+de Vue.
