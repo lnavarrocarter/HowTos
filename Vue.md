@@ -271,3 +271,63 @@ acción al momento de cerrar el modal. Lo que hacemos es que cuando el evento
 `close` es emitido, entonces actualizamos la propiedad **showModal** en `root`,
 lo que va a esconder el modal. Esta es la forma de comunicar dos instancias
 de Vue.
+
+## Comunicación entre componentes Hermanos
+
+Hay una técnica en Vue para crear una especie de instancia de Vue, como un
+canal de eventos donde podemos escuchar por y emitir diferentes eventos en
+Vue, para que luego otros componentes los usen. Así no estamos limitados a 
+comunicación padre-hijo, sino entre componentes hermanos que pertencen a
+la misma instancia principal de Vue.
+
+Así es como definimos una instancia de eventos de Vue:
+
+    window.Event = new Vue();
+
+    Vue.component('algo', {
+        template: `
+            <button v-on:click="doSomething"></button>
+        `,
+        methods: {
+            doSomething() {
+                // En vez de emitir un evento con this.$emit, lo emitimos a una instancia evento de Vue
+                Event.$emit('applied');
+            }
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        
+        data: {
+            someData: false
+        },
+        
+        created() {
+            // Esta es la forma para escuchar eventos en Vue.
+            Event.$on('applied', () => alert('Algún mensaje'));
+        }
+
+    });
+
+Una pequeña técnica es que podemos usar sintaxis de clase ES6 para hacer un
+wrapper a los métodos `$emit` y `$on`. Algo así en un archivo aparte para 
+ser compilado con Webpack:
+    
+    window.Event = new Class {
+
+        constructor() {
+            this.vue = new Vue();
+        }
+
+        fire(event, data = null) {
+            this.vue.$emit(event, data);
+        }
+
+        listen(event, callback) {
+            this.vue.$on(event, callback);
+        }
+        
+    } 
+
+Luego, podemos usar `Event.fire('un-evento', datos)` y `Event.listen('un-evento', callback)`.
