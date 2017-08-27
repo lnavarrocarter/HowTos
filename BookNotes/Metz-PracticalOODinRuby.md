@@ -68,3 +68,105 @@ cambiarlo.
 contextos.
 - **E**jemplar: El código debería inspirar a otros a perpetuar estas
 cualidades.
+
+Veamos el ejemplo de una aplicación que calcula la proporción de movimiento
+de una bicicleta de acuerdo a sus cambios. Entonces, en PHP:
+
+    class Cambio {
+
+        public $plato
+        
+        public $piñon
+
+        public function __construct($plato, $piñon)
+        {
+            $this.plato = $plato;
+            $this.piñon = $piñon;
+        }
+
+        public function proporcion()
+        {
+            $this.plato / $this.piñon;
+        }
+
+        echo new Cambio(52, 11)->proporcion()   // 4.727272727273
+        echo new Cambio(30, 27)->proporcion()   // 1.111111111111
+
+    }
+
+Si añadieramos a esto el calcular las pulgadas de cambio, deberíamos poner
+el diámetro de la rueda. Pero la rueda es un objeto distinto al cambio. Es
+aquí cuando diseñar nuestra aplicación entra en juego. Quizás necesitamos
+otra clase.
+
+Para determinar PRU, debemos tratar a la clase como una persona y hacerle
+preguntas: "Señor Cambio, ¿cuantos dientes tiene su plato? ¿cuantos dientes
+tiene su piñon? ¿cuál es su proporción?" Si introdujeramos una rueda, no 
+suena muy bien decir "Señor Cambio ¿cuál es el diámetro de su rueda?". Ahí
+es dónde necesitamos otra clase.
+
+Además, una clase debería tener una responsabilidad fácil y corta de describir.
+Si se necesita usar un "y" o un "o" es un indicador de que hay que crear
+otra clase.
+
+### Pensando en comportamiento, no datos
+Para escribir código que se adapta al cambio, se debe pensar en términos de
+comportamiento, y no datos. Por eso, cada propiedad debería tener "mutators",
+o "getters and setters" (métodos que asignan o obtienen el valor de una 
+propiedad en una clase).
+
+    class Cambio {
+
+        private $plato
+        
+        private $piñon
+
+        public function __construct($plato, $piñon)
+        {
+            $this->plato = $plato;
+            $this->piñon = $piñon;
+        }
+        
+        public function setPlato($plato)
+        {
+            $this->plato = $plato;
+        }
+
+        public function getPlato()
+        {
+            return $this->plato;
+        }
+
+        // And so on...
+
+        public function proporcion()
+        {
+            $this->plato / $this->piñon;
+        }
+
+        echo new Cambio(52, 11)->proporcion()   // 4.727272727273
+        echo new Cambio(30, 27)->proporcion()   // 1.111111111111
+
+    }
+
+Siempre es buena práctica esconder las propiedades de tu clase con un private.
+Así, otras clases ganan acceso a las propiedades por tus getters o setters,
+sólo cuando se están comunicando con tu clase. Esto significa cambiar de
+datos a comportamiento.
+
+### Escondiendo estructuras de datos complejas
+
+Evitar usar acceder a objetos como `$sum = value[1] + value [2]`. Esto es
+código mal referenciado. Es mejor definir qué es `value[1]` y `value[2]` en
+una propiedad o algo. Ponerles un nombre.
+
+### Extrayendo responsabilidades de métodos
+
+Cuando un método hace más de una cosa, debería separarse. Lo mismo una clase.
+Si un método hace una iteración y otro una suma, hay que separar esas dos
+acciones.
+
+### Isolando responsabilidades extras en clases
+
+Cuando una clase parece que tuviera más responsabilidades que las que debería
+tener, debemos pensar en hacer más clases.
